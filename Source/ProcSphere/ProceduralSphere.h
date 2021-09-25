@@ -24,9 +24,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION(BlueprintCallable)
-    void BuildUVSphere(const int Slices, const int Stacks, const float Radius, TArray<FVector>& SphereVertices, TArray<int32>& SphereTriangles);
+	void BuildUVSphere(const int Slices, const int Stacks, const float Radius, TArray<FVector>& SphereVertices, TArray<int32>& SphereTriangles);
     	
     UFUNCTION(BlueprintCallable)
-    void GenerateUVs(const TArray<FVector>& SphereVertices, TArray<FVector2D>& SphereUVs);
+    void GenerateUVs(const int Slices, const int Stacks, const TArray<FVector>& SphereVertices, TArray<FVector2D>& SphereUVs);
 
 };

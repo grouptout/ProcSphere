@@ -90,31 +90,29 @@ void AProceduralSphere::BuildUVSphere(const int Slices, const int Stacks, const 
 	}
 }
 
-void AProceduralSphere::GenerateUVs(const TArray<FVector>& SphereVertices, TArray<FVector2D>& SphereUVs)
+void AProceduralSphere::GenerateUVs(const int Slices, const int Stacks, const TArray<FVector>& SphereVertices, TArray<FVector2D>& SphereUVs)
 {
-	for (const auto Vertex : SphereVertices)
-	{
-		const auto NormalVertex = Vertex.GetSafeNormal();
-		auto NewUv = FVector2D(FMath::Atan2(NormalVertex.Z, NormalVertex.X) / PI / 2, (
-			                       Vertex.Z < 0
-				                       ? (PI / 2 - FMath::Acos(NormalVertex.Y))
-				                       : (3 * PI / 2 + FMath::Acos(NormalVertex.Y))
-		                       ) / 2 / PI);
-		SphereUVs.Add(NewUv);
+	const auto textureCellsCount = 16;    
+	const auto uvXStep = 1.f / Slices;
+	const auto uvYStep = 1.f / Stacks;
+ 
+	auto uvX = 0.f;
+	auto uvY = 0.f;
+ 
+	// add top vertex
+	SphereUVs.Add(FVector2D(0, 0.5f));
+ 
+	// generate vertices per stack / slice
+	for (int32 i = 0; i < Stacks - 1; i++) {
+		uvX = 0;
+		uvY += uvYStep;
+         
+		for (int32 j = 0; j < Slices; j++) {
+			uvX += uvXStep;
+			SphereUVs.Add(FVector2D(uvX, uvY));
+		}
 	}
+ 
+	// add bottom vertex
+	SphereUVs.Add(FVector2D(1, 0.5f));
 }
-
-
-
-
-		/*const auto NormalVertex = Vertex.GetSafeNormal();
-		auto NewUv = FVector2D(0.5f + FMath::Atan2(NormalVertex.X, NormalVertex.Z) / (2 * PI), 0.5f - FMath::Asin(NormalVertex.Y) / PI);*/
-		
-		
-		/*const auto NormalVertex = Vertex.GetSafeNormal();
-		auto NewUv = FVector2D(FMath::Atan2(NormalVertex.Z, NormalVertex.X) / PI / 2, (
-			                       Vertex.Z < 0
-				                       ? (PI / 2 - FMath::Acos(NormalVertex.Y))
-				                       : (3 * PI / 2 + FMath::Acos(NormalVertex.Y))
-		                       ) / 2 / PI);*/
-
